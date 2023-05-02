@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_editPassword"
+        android:icon="@drawable/icon_edit"
+        android:title="@string/edit_password" />
+    <item
+        android:id="@+id/nav_favourite"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="@string/favourite" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_baseline_logout_24"
+        android:title="@string/logout"/>
+
+</menu>
+

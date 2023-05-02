@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491704033317",
+    "project_id": "kelas-industri-advance",
+    "storage_bucket": "kelas-industri-advance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491704033317:android:bbde4b49976ff91e32dfcc",
+        "android_client_info": {
+          "package_name": "com.bennohan.kelasku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491704033317-q9802msrvl6kvekf7c4a17gi4iv6b89e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEYAM9HTUT2MV5-5kNGpYhBk8_psPlTcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491704033317-q9802msrvl6kvekf7c4a17gi4iv6b89e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

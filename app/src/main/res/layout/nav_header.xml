@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="user"
+            type="com.bennohan.kelasku.data.User" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/my_hint_color">
+
+
+    <ImageView
+        android:id="@+id/foto"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:contentDescription="@string/image_profile"
+        android:src="@drawable/person_vector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text='@{user.nama}'
+        android:layout_marginTop="@dimen/_12sdp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_18sdp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/foto"
+        tools:layout_editor_absoluteX="16dp"
+        tools:text="Mark Lee" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text='@{user.nomorTelepon}'
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+        tools:layout_editor_absoluteX="16dp"
+        tools:text="johndoe@example.com" />
+
+    <ImageButton
+        android:id="@+id/iconForward"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_27sdp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/button_profile"
+        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#00000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
