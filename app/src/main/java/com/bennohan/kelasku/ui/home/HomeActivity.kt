@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.base.adapter.ReactiveListAdapter
+import com.crocodic.core.extension.createIntent
 import com.crocodic.core.extension.openActivity
 import com.crocodic.core.extension.tos
 import com.crocodic.core.helper.ImagePreviewHelper
@@ -71,9 +72,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
                     holder.binding.btnViewProfile.setOnClickListener {
                         openActivity<DetailFriendsActivity> {
-                            putExtra(Const.FRIENDS.ID, item)
-                            putExtra(Const.FRIENDS.FRIENDS_DEVICE_TOKEN,item)
-                            android.util.Log.d("cekToken","cekToken : $item")
+                            putExtra(Const.FRIENDS.ID, item.userId)
                         }
                     }
                 }
@@ -123,15 +122,28 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             getListUser()
         }
 
-//        binding.ivProfile.setOnClickListener {
-//            activityLauncher.launch(createIntent<EditProfileActivity>()){
-//                if (it.resultCode == 1234){
-//                    getUser()
-//                }
-//            }
-//        }
+        binding.ivProfile.setOnClickListener {
+            activityLauncher.launch(createIntent<ProfileActivity>()){
+                if (it.resultCode == Const.RELOAD){
+                    getUser()
+                }
+            }
+        }
 
 
+    }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton(android.R.string.yes) { dialog, which ->
+                // Exit the activity
+                this@HomeActivity.finish()
+            }
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 
 

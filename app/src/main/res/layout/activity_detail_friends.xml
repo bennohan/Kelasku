@@ -45,29 +45,27 @@
 
         <ImageButton
             android:id="@+id/btnLike"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_baseline_favorite_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/_16sdp"
-            android:foreground="?selectableItemBackgroundBorderless"
-            android:background="#0003DAC5"
-            android:visibility='@{user.likeByYou ? View.VISIBLE : View.INVISIBLE}'
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/like_button" />
-
-        <ImageButton
-            android:id="@+id/btnDislike"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_baseline_favorite_border_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:foreground="?selectableItemBackgroundBorderless"
+            android:layout_width="19dp"
+            android:layout_height="25dp"
             android:layout_margin="@dimen/_16sdp"
             android:background="#0003DAC5"
-            android:contentDescription="@string/dislike_button"
-            android:visibility='@{user.likeByYou ? View.INVISIBLE : View.VISIBLE}'
+            android:contentDescription="@string/like_button"
+            android:foreground="?selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/btnDislike"-->
+<!--            android:layout_width="@dimen/_25sdp"-->
+<!--            android:layout_height="@dimen/_25sdp"-->
+<!--            android:src="@drawable/ic_baseline_favorite_border_24"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:foreground="?selectableItemBackgroundBorderless"-->
+<!--            android:layout_margin="@dimen/_16sdp"-->
+<!--            android:background="#0003DAC5"-->
+<!--            android:contentDescription="@string/dislike_button"-->
+<!--            android:visibility='@{user.likeByYou ? View.INVISIBLE : View.VISIBLE}'-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
 
         <ImageView

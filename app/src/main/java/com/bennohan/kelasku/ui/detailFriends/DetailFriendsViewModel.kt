@@ -26,6 +26,12 @@ class DetailFriendsViewModel @Inject constructor(
     private var _friends = MutableSharedFlow<User?>()
     var friends = _friends.asSharedFlow()
 
+    protected val _apiResponselike = MutableSharedFlow<ApiResponse>() // private mutable shared flow
+    val apiResponselike = _apiResponselike.asSharedFlow()
+
+    protected val _apiResponsedislike = MutableSharedFlow<ApiResponse>() // private mutable shared flow
+    val apiResponsedislike = _apiResponsedislike.asSharedFlow()
+
 
     fun getFriends(id: Int) = viewModelScope.launch {
         ApiObserver({ apiService.getUserId(id) },
@@ -65,6 +71,7 @@ class DetailFriendsViewModel @Inject constructor(
             false, object : ApiObserver.ResponseListener {
                 override suspend fun onSuccess(response: JSONObject) {
                     _apiResponse.emit(ApiResponse().responseSuccess())
+                    _apiResponselike.emit(ApiResponse().responseSuccess())
 
                 }
 
@@ -80,7 +87,7 @@ class DetailFriendsViewModel @Inject constructor(
             false, object : ApiObserver.ResponseListener {
                 override suspend fun onSuccess(response: JSONObject) {
                     _apiResponse.emit(ApiResponse().responseSuccess())
-
+                    _apiResponsedislike.emit(ApiResponse().responseSuccess())
                 }
                 override suspend fun onError(response: ApiResponse) {
                     super.onError(response)

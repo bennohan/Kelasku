@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.Session
+import com.bennohan.kelasku.data.User
 import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityDetailFriendsBinding
 import com.crocodic.core.api.ApiStatus
@@ -30,16 +31,17 @@ class DetailFriendsActivity :
     var phone : String? = null
     var userId : Int? = null
     var userLike : Boolean? = null
-    private var friendDeviceToken : String? = null
+     var friend : User? = null
+//    private var friendDeviceToken : String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
-
-        getFriends()
         observe()
+        getFriends()
 
         binding.btnWhatsapp.setOnClickListener {
             onChatButtonClick()
@@ -55,12 +57,24 @@ class DetailFriendsActivity :
         }
 
         binding.btnLike.setOnClickListener {
-            like()
-        }
+            if( userLike != true) {
+                binding.root.snacked("Friends Liked")
+                likeDislike()
+                binding.btnLike.setImageResource(R.drawable.ic_baseline_favorite_24)
 
-        binding.btnDislike.setOnClickListener {
-            like()
+            } else {
+                binding.root.snacked("Friends Disliked")
+                likeDislike()
+                binding.btnLike.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+
+
+            }
+
         }
+//
+//        binding.btnDislike.setOnClickListener {
+//            like()
+//        }
 
         binding.ivProfile.setOnClickListener {
             ImagePreviewHelper(this).show(binding.ivProfile, binding.user?.foto)
@@ -69,9 +83,12 @@ class DetailFriendsActivity :
     }
 
     private fun getFriends() {
-        val data = intent.getParcelableExtra<com.bennohan.kelasku.data.User>(Const.FRIENDS.ID)
-        data?.userId?.let { viewModel.getFriends(it) }
-        data?.deviceToken = friendDeviceToken
+        val data = intent.getIntExtra(Const.FRIENDS.ID,0)
+//        if (data?.userId != null){
+//            viewModel.getFriends(data.userId)
+//            Log.d("cek getFriends","$data")
+//        }
+        viewModel.getFriends(data ?: return)
 
     }
 
@@ -87,6 +104,7 @@ class DetailFriendsActivity :
                         when (it.status) {
                             ApiStatus.LOADING -> loadingDialog.show()
                             ApiStatus.SUCCESS -> {
+                                binding.user = friend
                                 loadingDialog.dismiss()
                                 loadingDialog.setResponse(it.message ?: return@collect)
 
@@ -101,6 +119,7 @@ class DetailFriendsActivity :
                 }
                 launch {
                     viewModel.friends.collect{ friends ->
+                        friend = friends
                         binding.user = friends
                         phone = friends?.nomorTelepon
                         userId = friends?.userId
@@ -109,6 +128,7 @@ class DetailFriendsActivity :
                         Log.d("cek nomor","cek nomor : $phone")
                     }
                 }
+
             }
         }
     }
@@ -120,15 +140,15 @@ class DetailFriendsActivity :
         startActivity(intent)
     }
 
-    private fun like() {
-        if( userLike != true) {
+    private fun likeDislike() {
+        if (userLike == true){
             userId?.let { viewModel.like(it) }
-            binding.root.snacked("Friends Liked")
-        } else {
+            setResult(Const.RELOAD)
+        }else{
             viewModel.dislike(userId)
-            binding.root.snacked("Friends Disliked")
-
+            setResult(Const.RELOAD)
         }
+
     }
 
 }

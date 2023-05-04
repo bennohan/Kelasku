@@ -5,6 +5,7 @@ import android.view.View
 import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.Session
+import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityProfileBinding
 import com.bennohan.kelasku.ui.editProfile.EditProfileActivity
 import com.crocodic.core.extension.createIntent
@@ -27,12 +28,11 @@ class ProfileActivity :
 
 
         binding.btnBack.setOnClickListener {
+            setResult(Const.RELOAD)
             finish()
         }
 
-//        binding.btnEditProfile.setOnClickListener {
-//            openActivity<EditProfileActivity>()
-//        }
+
 
         binding.ivProfile.setOnClickListener {
             ImagePreviewHelper(this).show(binding.ivProfile, binding.user?.foto)
@@ -40,7 +40,7 @@ class ProfileActivity :
 
         binding.btnEditProfile.setOnClickListener {
             activityLauncher.launch(createIntent<EditProfileActivity>()) {
-                if (it.resultCode == 1234) {
+                if (it.resultCode == 6100) {
                     getUser()
                 }
             }
@@ -52,6 +52,8 @@ class ProfileActivity :
     private fun getUser() {
         val user = session.getUser()
         binding.user = user
+        setResult(Const.RELOAD)
+
     }
 
 }

@@ -27,6 +27,7 @@ import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.School
 import com.bennohan.kelasku.data.Session
+import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityEditProfileBinding
 import com.bennohan.kelasku.ui.profile.ProfileActivity
 import com.crocodic.core.api.ApiStatus
@@ -141,7 +142,7 @@ class EditProfileActivity :
             Log.d("Compress", "File: $compressesFile")
             if (compressesFile != null) {
                 if (schoolId.isNullOrEmpty()) {
-                    viewModel.editProfile(name, session.getUser()?.sekolahId.toString())
+                    viewModel.updateUserWithPhoto(name, session.getUser()?.sekolahId.toString(),compressesFile)
                 } else {
                     viewModel.updateUserWithPhoto(name, schoolId, compressesFile)
                 }
@@ -161,7 +162,7 @@ class EditProfileActivity :
                             ApiStatus.LOADING -> loadingDialog.show("Updating...")
                             ApiStatus.SUCCESS -> {
                                 loadingDialog.dismiss()
-                                setResult(1234)
+                                setResult(6100)
                                 finish()
                             }
                             ApiStatus.ERROR -> {

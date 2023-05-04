@@ -3,16 +3,16 @@ package com.bennohan.kelasku.fcm
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.bennohan.kelasku.R
-import com.bennohan.kelasku.api.ApiService
-import com.bennohan.kelasku.data.Session
 import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.ui.detailFriends.DetailFriendsActivity
-import com.crocodic.core.model.AppNotification
+import com.bennohan.kelasku.ui.home.HomeActivity
+import com.crocodic.core.helper.DateTimeHelper
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -24,9 +24,6 @@ class FirebaseMsgService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("firebase-token", token)
-        /*session.setValue(Session.TOKEN_FCM, token)
-
-        session.getString(Session.TOKEN_FCM)*/
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -35,23 +32,33 @@ class FirebaseMsgService : FirebaseMessagingService() {
         val context: Context = applicationContext
 
         Log.d("fcmServis", "messageData:${message.data}")
-        Log.d("fcmServis", "message:${message.notification}")
-        Timber.d("firebase_receive_message_title : ${message.data["user_id"]}")
+        Log.d("fcmServis", "${message.data["user_id"]}")
+        Log.d("firebase_receive_message_title", "firebase_receive_message_title: ${message.data["title"]}")
         Timber.d("firebase_receive_message_title : ${message.data["title"]}")
         Timber.d("firebase_receive_message_message : ${message.data["message"]}")
 
+//        if (message.notification != null) {
+//            showNotification(
+//                context,
+//                message.notification!!.title!!,
+//                message.notification!!.body!!
+//                //todo:title mengambil titlenya, body itu messagenya
+//            )
+//        }
 
-        if (message.notification != null) {
-            showNotification(
+
+
+        showNotification(
                 context,
                 message.data["title"] ?:return,
                 message.data["body"] ?:return,
+                message.data["user_id"] ?: return,
 //                message.data["title"] ?:return,
 //                message.notification!!.title!!,
 //                message.notification!!.body!!
                 //todo:title mengambil titlenya, body itu messagenya
             )
-        }
+
 
     }
 
@@ -64,7 +71,7 @@ private fun sendRegistrationToServer(token: String?) {
 }
 
 //todo: untuk edit notifikasinya, notifasi manager sudah ada di android
-fun showNotification(context: Context, title: String, message: String) {
+fun showNotification(context: Context, title: String, message: String, userId : String ) {
     //todo:Notification Manager
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -84,44 +91,35 @@ fun showNotification(context: Context, title: String, message: String) {
         notificationManager.createNotificationChannel(channel)
     }
 
+    val homeIntent = Intent(context, HomeActivity::class.java)
+
     //todo: untuk edit titile, masage, logo
     // todo:Builder
-    val resultIntent = Intent(context, DetailFriendsActivity::class.java)
-    var resultPendingIntent: PendingIntent? = PendingIntent.getActivity(context, 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val detailIntent = Intent(context, DetailFriendsActivity::class.java).apply{
+        putExtra(Const.FRIENDS.ID, userId.toInt())
+        Log.d("cek Id","cek Id : $userId")
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+
+
+    var resultPendingIntent: PendingIntent? = PendingIntent.getActivity(context, 1, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val stackBuilder = TaskStackBuilder.create(context)
+    stackBuilder.addNextIntent(homeIntent)
+    stackBuilder.addNextIntent(detailIntent)
+    resultPendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_CANCEL_CURRENT)
+
     val builder = NotificationCompat.Builder(context,"CHANNEL_ID")
         .setSmallIcon(R.drawable.person_vector)
-//        .setContentInfo(user_id)
-        .setContentIntent(resultPendingIntent)
-        .setAutoCancel(true)
         .setContentTitle(title)
         .setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setContentIntent(resultPendingIntent)
+        .setAutoCancel(true)
 
     // todo:Show Notification
-    notificationManager.notify(1, builder.build())
+    val notificationId = DateTimeHelper().createAtLong().toInt()
+    notificationManager.notify(notificationId, builder.build())
 }
 
-//    override fun onNewToken(token: String) {
-//        super.onNewToken(token)
-//        Log.d("firebasetoken",token)
-//
-//    }
-//
-//    override fun onMessageReceived(message: RemoteMessage) {
-//        super.onMessageReceived(message)
-//
-//        val context: Context = applicationContext
-//
-//        Log.d("notification", "${message.data}")
-//
-//
-//        val title:String? = message.data["title"]
-//        val content : String? = message.data["content"]
-//
-//        val appNotification = AppNotification(
-//            title = title,
-//            content = content
-//        )
-//        EventBus.getDefault().post(appNotification)
-//
-//    }
+
