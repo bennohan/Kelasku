@@ -22,7 +22,7 @@
             android:id="@+id/btnBack"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
-            android:background="#00CD1430"
+            android:background="@null"
             android:layout_margin="@dimen/_16sdp"
             android:contentDescription="@string/return_button"
             android:foreground="?selectableItemBackgroundBorderless"
@@ -48,7 +48,7 @@
             android:layout_width="19dp"
             android:layout_height="25dp"
             android:layout_margin="@dimen/_16sdp"
-            android:background="#0003DAC5"
+            android:background="@null"
             android:src='@{user.likeByYou ? @drawable/ic_baseline_favorite_24 : @drawable/ic_baseline_favorite_border_24}'
             android:contentDescription="@string/like_button"
             android:foreground="?selectableItemBackgroundBorderless"

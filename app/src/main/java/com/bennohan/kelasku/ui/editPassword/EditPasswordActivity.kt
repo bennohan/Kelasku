@@ -53,18 +53,16 @@ class EditPasswordActivity : BaseActivity<ActivityEditPasswordBinding,EditPasswo
                     viewModel.apiResponse.collect {
                         //when(it.message){}
                         when (it.status) {
-                            ApiStatus.LOADING -> loadingDialog.show("Update.....ing")
+                            ApiStatus.LOADING -> loadingDialog.show("Updating")
                             ApiStatus.SUCCESS -> {
+                                loadingDialog.dismiss()
+                                loadingDialog.setResponse(it.message ?: return@collect)
                                 binding.root.snacked("Updating Success")
                             }
                             ApiStatus.ERROR -> {
                                 disconnect(it)
                                 binding.root.snacked("Updating Failed")
-
-//                                tos(it.message ?: return@collect)
                                 loadingDialog.setResponse(it.message ?: return@collect)
-//                                loadingDialog.dismiss()
-
                             }
                             else -> loadingDialog.setResponse(it.message ?: return@collect)
                         }
@@ -87,14 +85,18 @@ class EditPasswordActivity : BaseActivity<ActivityEditPasswordBinding,EditPasswo
 
         if (newPassword != confirmPassword){
             binding.tvPasswordNotMatch.visibility = View.VISIBLE
+            binding.tvPasswordLength.visibility = View.GONE
 //            binding.textInputConfirmPassword.error = "Password Not Match"
         } else{
             binding.tvPasswordNotMatch.visibility = View.GONE
+            binding.tvPasswordLength.visibility = View.GONE
             if (newPassword.length >=6){
+                binding.tvPasswordNotMatch.visibility = View.GONE
                 binding.tvPasswordLength.visibility = View.GONE
                 viewModel.editPassword(currentPassword, newPassword)
             } else {
                 //password does not meet minimum
+                binding.tvPasswordNotMatch.visibility = View.GONE
                 binding.tvPasswordLength.visibility = View.VISIBLE
             }
         }

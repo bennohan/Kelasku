@@ -15,7 +15,7 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="22dp"
-            android:background="#00000000"
+            android:background="@null"
             android:contentDescription="@string/return_button"
             android:scaleType="fitXY"
             android:foreground="?selectableItemBackgroundBorderless"
@@ -31,6 +31,7 @@
             android:layout_marginTop="22dp"
             android:text="@string/register_account"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="@dimen/_18sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnBack" />
@@ -41,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:textColor="#323131"
             android:text="@string/fill_your_details_or_continue_with_social_media"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -65,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/nama"
+                android:textColor="@color/black"
                 android:inputType="text"
                 android:textStyle="bold" />
 
@@ -89,6 +92,7 @@
                 android:background="@drawable/edittext_background"
                 android:hint="@string/nomor_telephone"
                 android:inputType="phone"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -104,6 +108,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:background="@drawable/edittext_background"
             app:layout_constraintEnd_toEndOf="parent"
+            app:hintTextColor="@color/black"
+
             app:layout_constraintTop_toBottomOf="@id/textInputPhone">
 
             <AutoCompleteTextView
@@ -114,40 +120,6 @@
                 android:layout_height="match_parent"
                 android:textStyle="bold"
                 android:dropDownAnchor="@id/autoCompleteSpinner" />
-
-            <!-- spinner_layout.xml -->
-            <!--        <RelativeLayout-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="@dimen/_50sdp"-->
-            <!--            android:background="#00CD1430"-->
-            <!--            app:layout_constraintTop_toBottomOf="@+id/textInputPhone">-->
-
-            <!--            <Spinner-->
-            <!--                android:id="@+id/spinner"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:background="#00CD1430"-->
-            <!--                android:spinnerMode="dialog" />-->
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/searchIcon"-->
-            <!--                android:layout_width="@dimen/_24sdp"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:layout_alignParentRight="true"-->
-            <!--                android:layout_centerVertical="true"-->
-            <!--                android:layout_marginRight="8dp"-->
-            <!--                android:src="@android:drawable/ic_menu_search" />-->
-
-            <!--        </RelativeLayout>-->
-
-
-            <!--            <Spinner-->
-            <!--                android:id="@+id/schoolSpiner"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:spinnerMode="dropdown"-->
-            <!--                android:background="@drawable/edittext_backround"-->
-            <!--                android:popupBackground="@drawable/edittext_backround" />-->
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,6 +143,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/password"
+                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:textStyle="bold" />
 
@@ -195,6 +168,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/confirm_password"
+                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:textStyle="bold" />
 

@@ -1,17 +1,20 @@
 package com.bennohan.kelasku.ui.home
 
 import android.app.AlertDialog
+import android.Manifest
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowInsetsController
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.widget.doOnTextChanged
@@ -55,6 +58,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private lateinit var navView: NavigationView
 
     private var listFriends = ArrayList<User?>()
+    private var userName: String? = null
+    private var userPhone: String? = null
 
 
     private val adapterUser by lazy {
@@ -97,23 +102,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         //Set Status Bar Text to Black
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
-//        window.insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-//            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-
-
         getUser()
-        observe()
         getListUser()
-        sideMenu()
         search()
-
-
+        observe()
+        askNotificationPermission()
 
         binding.rvUser.adapter = adapterUser
 
-        binding.ivProfile.setOnClickListener {
-            openActivity<ProfileActivity>()
-        }
+
 
         //Swipe Refresh Layout
         binding.refreshLayout.setOnRefreshListener {
@@ -122,10 +119,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             getListUser()
         }
 
+        binding.btnMenu.setOnClickListener {
+            sideMenu()
+        }
+
         binding.ivProfile.setOnClickListener {
-            activityLauncher.launch(createIntent<ProfileActivity>()){
-                if (it.resultCode == Const.RELOAD){
-                    tos("cek")
+            activityLauncher.launch(createIntent<ProfileActivity>()) {
+                if (it.resultCode == Const.RELOAD) {
                     getUser()
                 }
             }
@@ -135,23 +135,39 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     override fun onBackPressed() {
-        AlertDialog.Builder(this)
-            .setTitle("Exit")
-            .setMessage("Are you sure you want to exit?")
-            .setPositiveButton(android.R.string.yes) { dialog, which ->
-                // Exit the activity
+        val builder = AlertDialog.Builder(this@HomeActivity)
+        builder.setTitle("Exit")
+        builder.setMessage("Are you sure you want to exit?.")
+            .setPositiveButton("Exit") { dialog, id ->
                 this@HomeActivity.finish()
             }
-            .setNegativeButton(android.R.string.no, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show()
+            .setNegativeButton("Cancel") { dialog, id ->
+                dialog.dismiss()
+            }
+        val dialog: AlertDialog = builder.create()
+
+        // Set the color of the positive button text
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextColor(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
+        }
+        dialog.show()
     }
 
 
     private fun getUser() {
-        val user = session.getUser()
-        binding.user = user
+//        val user = session.getUser()
+//        binding.user = user
         viewModel.getUser()
+////                success ->
+////            if(success) {
+////                sideMenu()
+////            }
+//        }
+//        userName = user?.nama
+//        userPhone = user?.nomorTelepon
     }
 
     private fun getListUser() {
@@ -169,11 +185,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         val ivProfile = headerView.findViewById<ImageView>(R.id.foto)
         val btnForward = headerView.findViewById<ImageButton>(R.id.iconForward)
 
-
         val user = session.getUser()
-        tvUsername.text = user?.nama
-        tvPhone.text = user?.nomorTelepon
-
+//        tvUsername.text = user?.nama
+//        tvPhone.text = user?.nomorTelepon
+        tvUsername.text = userName
+        Log.d("cek user","$userName")
+        tvPhone.text = userPhone
 
         Glide.with(this)
             .load(user?.foto)
@@ -197,12 +214,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
             override fun onDrawerOpened(drawerView: View) {
                 // Set the status bar color to the drawer open color when the drawer is opened
-                window.statusBarColor = ContextCompat.getColor(this@HomeActivity, R.color.my_hint_color)
+                window.statusBarColor =
+                    ContextCompat.getColor(this@HomeActivity, R.color.my_hint_color)
                 window.decorView.systemUiVisibility = 0
             }
 
             override fun onDrawerClosed(drawerView: View) {
-                window.statusBarColor = ContextCompat.getColor(this@HomeActivity, R.color.main_background_color)
+                window.statusBarColor =
+                    ContextCompat.getColor(this@HomeActivity, R.color.main_background_color)
 
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
@@ -284,6 +303,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     }
                 }
                 launch {
+                    viewModel.user.collect{ dataUser ->
+                        binding.user = dataUser
+                        userName = dataUser?.nama
+                        userPhone = dataUser?.nomorTelepon
+                        sideMenu()
+                    }
+                }
+                launch {
                     viewModel.listUser.collect { listUser ->
                         binding.refreshLayout.isRefreshing = false
                         listFriends.clear()
@@ -328,13 +355,38 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
         // Set the color of the positive button text
         dialog.setOnShowListener {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
-            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.black))
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextColor(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                .setTextColor(ContextCompat.getColor(this, R.color.black))
         }
 
         // Show the dialog
         dialog.show()
 
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            tos("Permission Granted")
+        } else {
+            tos("Permission Denied")
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+            } else
+                if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
 

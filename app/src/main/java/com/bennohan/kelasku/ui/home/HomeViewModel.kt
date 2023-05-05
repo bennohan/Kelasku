@@ -28,8 +28,16 @@ class HomeViewModel @Inject constructor(
     private var _listUser = MutableSharedFlow<List<User?>>()
     var listUser = _listUser.asSharedFlow()
 
+    private var _user = MutableSharedFlow<User?>()
+    var user = _user.asSharedFlow()
+
+
+    val gh = theText("hhnvnv")
+    fun theText(msg: String) : String {
+        return msg
+    }
     //getUser
-    fun getUser () = viewModelScope.launch {
+    fun getUser ( ) = viewModelScope.launch {
         _apiResponse.emit(ApiResponse().responseLoading())
         ApiObserver({ apiService.getUser() },
             false,
@@ -37,12 +45,14 @@ class HomeViewModel @Inject constructor(
                 override suspend fun onSuccess(response: JSONObject) {
                     val data = response.getJSONObject(ApiCode.DATA).toObject<User>(gson)
                     session.saveUser(data)
+//                    result(true)
                     _apiResponse.emit(ApiResponse().responseSuccess())
-
+                    _user.emit(data)
                 }
 
                 override suspend fun onError(response: ApiResponse) {
                     super.onError(response)
+//                    result(false)
                     _apiResponse.emit(ApiResponse().responseError())
 
                 }

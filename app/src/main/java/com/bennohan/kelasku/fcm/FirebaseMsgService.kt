@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.bennohan.kelasku.R
@@ -33,31 +34,24 @@ class FirebaseMsgService : FirebaseMessagingService() {
 
         Log.d("fcmServis", "messageData:${message.data}")
         Log.d("fcmServis", "${message.data["user_id"]}")
-        Log.d("firebase_receive_message_title", "firebase_receive_message_title: ${message.data["title"]}")
+        Log.d(
+            "firebase_receive_message_title",
+            "firebase_receive_message_title: ${message.data["title"]}"
+        )
         Timber.d("firebase_receive_message_title : ${message.data["title"]}")
         Timber.d("firebase_receive_message_message : ${message.data["message"]}")
 
-//        if (message.notification != null) {
-//            showNotification(
-//                context,
-//                message.notification!!.title!!,
-//                message.notification!!.body!!
-//                //todo:title mengambil titlenya, body itu messagenya
-//            )
-//        }
-
-
 
         showNotification(
-                context,
-                message.data["title"] ?:return,
-                message.data["body"] ?:return,
-                message.data["user_id"] ?: return,
+            context,
+            message.data["title"] ?: return,
+            message.data["body"] ?: return,
+            message.data["user_id"] ?: return,
 //                message.data["title"] ?:return,
 //                message.notification!!.title!!,
 //                message.notification!!.body!!
-                //todo:title mengambil titlenya, body itu messagenya
-            )
+            //todo:title mengambil titlenya, body itu messagenya
+        )
 
 
     }
@@ -71,7 +65,7 @@ private fun sendRegistrationToServer(token: String?) {
 }
 
 //todo: untuk edit notifikasinya, notifasi manager sudah ada di android
-fun showNotification(context: Context, title: String, message: String, userId : String ) {
+fun showNotification(context: Context, title: String, message: String, userId: String) {
     //todo:Notification Manager
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -95,21 +89,28 @@ fun showNotification(context: Context, title: String, message: String, userId : 
 
     //todo: untuk edit titile, masage, logo
     // todo:Builder
-    val detailIntent = Intent(context, DetailFriendsActivity::class.java).apply{
+    val detailIntent = Intent(context, DetailFriendsActivity::class.java).apply {
         putExtra(Const.FRIENDS.ID, userId.toInt())
-        Log.d("cek Id","cek Id : $userId")
+        Log.d("cek Id", "cek Id : $userId")
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
 
 
-    var resultPendingIntent: PendingIntent? = PendingIntent.getActivity(context, 1, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    var resultPendingIntent: PendingIntent? =
+        PendingIntent.getActivity(
+            context, 1, detailIntent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT)
 
     val stackBuilder = TaskStackBuilder.create(context)
     stackBuilder.addNextIntent(homeIntent)
     stackBuilder.addNextIntent(detailIntent)
-    resultPendingIntent = stackBuilder.getPendingIntent(1,PendingIntent.FLAG_CANCEL_CURRENT)
+    resultPendingIntent = stackBuilder.getPendingIntent(
+        1,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE
+        else PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
-    val builder = NotificationCompat.Builder(context,"CHANNEL_ID")
+    val builder = NotificationCompat.Builder(context, "CHANNEL_ID")
         .setSmallIcon(R.drawable.person_vector)
         .setContentTitle(title)
         .setContentText(message)

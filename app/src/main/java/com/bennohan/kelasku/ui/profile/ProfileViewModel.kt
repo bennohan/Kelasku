@@ -11,6 +11,8 @@ import com.crocodic.core.api.ApiResponse
 import com.crocodic.core.extension.toObject
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
@@ -22,6 +24,10 @@ class ProfileViewModel @Inject constructor(
     private val session: Session,
     ) : BaseViewModel() {
 
+    private var _User = MutableSharedFlow<User?>()
+    var user = _User.asSharedFlow()
+
+
     //getUser
     fun getUser () = viewModelScope.launch {
         _apiResponse.emit(ApiResponse().responseLoading())
@@ -32,6 +38,7 @@ class ProfileViewModel @Inject constructor(
                     val data = response.getJSONObject(ApiCode.DATA).toObject<User>(gson)
                     session.saveUser(data)
                     _apiResponse.emit(ApiResponse().responseSuccess())
+                    _User.emit(data)
 
                 }
 

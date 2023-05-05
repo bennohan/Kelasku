@@ -77,14 +77,17 @@ class RegisterActivity :
 
         if (password != confirm){
             binding.tvPasswordNotMatch.visibility = View.VISIBLE
+            binding.tvPasswordLength.visibility = View.GONE
         } else{
             binding.tvPasswordNotMatch.visibility = View.GONE
+            binding.tvPasswordLength.visibility = View.GONE
             if (password.length >=6){
                 binding.tvPasswordLength.visibility = View.GONE
+                binding.tvPasswordNotMatch.visibility = View.GONE
                 viewModel.register(name, phone, schoolId, password)
-
             } else {
                 //password does not meet minimum
+                binding.tvPasswordNotMatch.visibility = View.GONE
                 binding.tvPasswordLength.visibility = View.VISIBLE
             }
         }
@@ -136,6 +139,7 @@ class RegisterActivity :
         val autoCompleteSpinner = findViewById<AutoCompleteTextView>(R.id.autoCompleteSpinner)
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, dataSchool)
         autoCompleteSpinner.setAdapter(adapter)
+        binding.autoCompleteSpinner.setTextColor(resources.getColor(R.color.black))
 
 
         // Show the dropdown list when the AutoCompleteTextView is clicked

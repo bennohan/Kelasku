@@ -30,6 +30,7 @@
             android:layout_marginStart="28dp"
             android:text="@string/fill_your_details_or_continue_with_register"
             android:textSize="@dimen/_18sdp"
+            android:textColor="#323131"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -41,6 +42,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_marginEnd="@dimen/_28sdp"
             android:layout_marginTop="@dimen/_30sdp"
+            android:textColorHint="@color/my_hint_color"
             app:startIconDrawable="@drawable/phone_vector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +55,7 @@
                 android:layout_gravity="center_vertical"
                 android:hint="@string/nomor_telephone"
                 android:autofillHints="phone"
+                android:textColor="@color/black"
                 android:background="@drawable/edittext_background"
                 android:inputType="phone"
                 android:textStyle="bold" />
@@ -67,6 +70,8 @@
             android:layout_marginStart="28dp"
             app:startIconDrawable="@drawable/password_vector"
             android:layout_marginEnd="@dimen/_28sdp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/my_hint_color"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +85,8 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/password"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:textStyle="bold" />
 
@@ -110,7 +117,8 @@
             android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

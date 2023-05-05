@@ -19,7 +19,7 @@
             android:id="@+id/btnBack"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
-            android:background="#00CD1430"
+            android:background="@null"
             android:layout_margin="@dimen/_16sdp"
             android:foreground="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_baseline_arrow_back_24"

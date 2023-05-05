@@ -1,6 +1,8 @@
 package com.bennohan.kelasku.ui.editProfile
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -55,7 +57,7 @@ class EditProfileActivity :
     private var dataSchool = ArrayList<School?>()
     private var schoolId: String? = null
 
-
+    private var userName: String? = null
     private var school: Int? = null
     private var filePhoto: File? = null
 
@@ -72,6 +74,18 @@ class EditProfileActivity :
         getListSchool()
 
         binding.btnBack.setOnClickListener {
+            if (filePhoto != null ) {
+                unsavedAlret()
+                return@setOnClickListener
+            }
+            if (binding.etName.textOf().isNotEmpty() && binding.etName.textOf() != userName) {
+                unsavedAlret()
+                return@setOnClickListener
+            }
+            if (schoolId != null){
+                unsavedAlret()
+                return@setOnClickListener
+            }
             finish()
         }
 
@@ -94,10 +108,10 @@ class EditProfileActivity :
     }
 
 
-
     private fun getUser() {
         val user = session.getUser()
         school = user?.sekolahId
+        userName = user?.nama
         binding.user = user
         setResult(6100)
     }
@@ -109,10 +123,15 @@ class EditProfileActivity :
 
     private fun editProfile() {
         val name = binding.etName.textOf()
+        Log.d("cek name", "$userName")
 
+        if (schoolId.isNullOrEmpty() && name.isNullOrEmpty()) {
+            binding.root.snacked("data tidak ada perubahan")
+            return
+        }
 
-        if (schoolId.isNullOrEmpty() && name.isEmpty()) {
-            tos("data tidak ada perubahan")
+        if (name == userName && schoolId.isNullOrEmpty()) {
+            binding.root.snacked("data tidak ada perubahan")
             return
         }
 
@@ -129,16 +148,20 @@ class EditProfileActivity :
     private fun editProfilePhoto() {
         val name = binding.etName.textOf()
 
-        if (schoolId.isNullOrEmpty() && name.isEmpty()) {
-            tos("data tidak ada perubahan")
-        }
+//        if (schoolId.isNullOrEmpty() && name.isNullOrEmpty()) {
+//            tos("data tidak ada perubahan")
+//        }
 
         lifecycleScope.launch {
             val compressesFile = compressFile(filePhoto!!)
             Log.d("Compress", "File: $compressesFile")
             if (compressesFile != null) {
                 if (schoolId.isNullOrEmpty()) {
-                    viewModel.updateUserWithPhoto(name, session.getUser()?.sekolahId.toString(),compressesFile)
+                    viewModel.updateUserWithPhoto(
+                        name,
+                        session.getUser()?.sekolahId.toString(),
+                        compressesFile
+                    )
                 } else {
                     viewModel.updateUserWithPhoto(name, schoolId, compressesFile)
                 }
@@ -388,5 +411,41 @@ class EditProfileActivity :
 
     }
 
+    override fun onBackPressed() {
+        if (filePhoto != null ) {
+            unsavedAlret()
+            return
+        }
+        if (binding.etName.textOf().isNotEmpty() && binding.etName.textOf() != userName) {
+            unsavedAlret()
+            return
+        }
+        if (schoolId != null){
+            unsavedAlret()
+            return
+        }
+        finish()
+    }
+
+    private fun unsavedAlret(){
+        val builder = AlertDialog.Builder(this@EditProfileActivity)
+        builder.setTitle("Unsaved Changes")
+        builder.setMessage("You have unsaved changes. Are you sure you want to Abandon changes?.")
+            .setPositiveButton("Abandon") { dialog, id ->
+                this@EditProfileActivity.finish()
+            }
+            .setNegativeButton("Keep Editing") { dialog, id ->
+                dialog.dismiss()
+            }
+        val dialog: AlertDialog = builder.create()
+
+        // Set the color of the positive button text
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.my_hint_color))
+        }
+        dialog.show()
+
+    }
 
 }

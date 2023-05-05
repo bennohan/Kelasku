@@ -51,7 +51,6 @@ class ProfileActivity :
                 if (it.resultCode == 6100) {
                     getUser()
                     observe()
-                    tos("pp")
                 }
                 android.util.Log.d("cek resultCode", "${it.resultCode}")
 
@@ -68,11 +67,9 @@ class ProfileActivity :
                     viewModel.apiResponse.collect {
                         when (it.status) {
                             ApiStatus.LOADING -> loadingDialog.show()
-                            ApiStatus.SUCCESS ->{
+                            ApiStatus.SUCCESS -> {
                                 loadingDialog.dismiss()
                                 loadingDialog.setResponse(it.message ?: return@collect)
-                                val user = session.getUser()
-                                binding.user = user
 
                             }
                             ApiStatus.ERROR -> {
@@ -85,14 +82,25 @@ class ProfileActivity :
                         }
                     }
                 }
+
+                launch {
+                    viewModel.user.collect { dataUser ->
+                        binding.user = dataUser
+
+                    }
+                }
+
             }
         }
     }
 
     private fun getUser() {
-        val user = session.getUser()
-        binding.user = user
         viewModel.getUser()
+//        val user = session.getUser()
+//        binding.user = user
+//        binding.tvName.text = user?.nama
+//        binding.tvSchool.text = user?.namaSekolah
+//        tos("getuser")
         setResult(Const.RELOAD)
 
     }
