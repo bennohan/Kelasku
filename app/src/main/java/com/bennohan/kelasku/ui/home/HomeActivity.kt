@@ -125,6 +125,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         binding.ivProfile.setOnClickListener {
             activityLauncher.launch(createIntent<ProfileActivity>()){
                 if (it.resultCode == Const.RELOAD){
+                    tos("cek")
                     getUser()
                 }
             }

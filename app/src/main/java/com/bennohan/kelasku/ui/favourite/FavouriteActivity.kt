@@ -16,6 +16,7 @@ import com.bennohan.kelasku.ui.detailFriends.DetailFriendsActivity
 import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.base.adapter.ReactiveListAdapter
 import com.crocodic.core.extension.openActivity
+import com.crocodic.core.helper.log.Log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,9 +38,7 @@ class FavouriteActivity : BaseActivity<ActivityFavouriteBinding,FavouriteViewMod
 
                     holder.binding.btnViewProfile.setOnClickListener {
                         openActivity<DetailFriendsActivity> {
-                            putExtra(Const.FRIENDS.ID, item)
-                            putExtra(Const.FRIENDS.FRIENDS_DEVICE_TOKEN,item)
-                            android.util.Log.d("cekToken","cekToken : $item")
+                            putExtra(Const.FRIENDS.ID, item.userId)
                         }
                     }
                 }
@@ -66,6 +65,10 @@ class FavouriteActivity : BaseActivity<ActivityFavouriteBinding,FavouriteViewMod
 
         binding.btnBack.setOnClickListener {
             finish()
+        }
+
+        binding.refreshLayout.setOnRefreshListener {
+            observe()
         }
 
     }
@@ -96,8 +99,10 @@ class FavouriteActivity : BaseActivity<ActivityFavouriteBinding,FavouriteViewMod
                 }
                 launch {
                     viewModel.listUser.collect { listUser ->
+                        binding.refreshLayout.isRefreshing = false
                         val filterUser = listUser.filter { it?.likeByYou == true
                         }
+                        android.util.Log.d("cek list like","$filterUser")
                         adapterUser.submitList(filterUser)
 
                     }

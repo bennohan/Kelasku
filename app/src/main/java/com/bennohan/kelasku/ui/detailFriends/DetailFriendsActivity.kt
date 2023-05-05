@@ -3,7 +3,6 @@ package com.bennohan.kelasku.ui.detailFriends
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -11,7 +10,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.Session
-import com.bennohan.kelasku.data.User
 import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityDetailFriendsBinding
 import com.crocodic.core.api.ApiStatus
@@ -28,11 +26,9 @@ class DetailFriendsActivity :
 
     @Inject
     lateinit var session: Session
-    var phone : String? = null
-    var userId : Int? = null
-    var userLike : Boolean? = null
-     var friend : User? = null
-//    private var friendDeviceToken : String? = null
+    private var phone: String? = null
+    private var userId: Int? = null
+    private var userLike: Boolean? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,42 +53,22 @@ class DetailFriendsActivity :
         }
 
         binding.btnLike.setOnClickListener {
-            if( userLike != true) {
-                binding.root.snacked("Friends Liked")
-                likeDislike()
-                binding.btnLike.setImageResource(R.drawable.ic_baseline_favorite_24)
-
-            } else {
-                binding.root.snacked("Friends Disliked")
-                likeDislike()
-                binding.btnLike.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-
-
-            }
-
+            likeDislike()
         }
-//
-//        binding.btnDislike.setOnClickListener {
-//            like()
-//        }
 
         binding.ivProfile.setOnClickListener {
             ImagePreviewHelper(this).show(binding.ivProfile, binding.user?.foto)
-            }
+        }
 
     }
 
     private fun getFriends() {
-        val data = intent.getIntExtra(Const.FRIENDS.ID,0)
-//        if (data?.userId != null){
-//            viewModel.getFriends(data.userId)
-//            Log.d("cek getFriends","$data")
-//        }
-        viewModel.getFriends(data ?: return)
+        val data = intent.getIntExtra(Const.FRIENDS.ID, 0)
+        viewModel.getFriends(data)
 
     }
 
-    private fun colek(){
+    private fun colek() {
         viewModel.getNotificationColek(userId)
     }
 
@@ -104,10 +80,15 @@ class DetailFriendsActivity :
                         when (it.status) {
                             ApiStatus.LOADING -> loadingDialog.show()
                             ApiStatus.SUCCESS -> {
-                                binding.user = friend
+                                if (it.message == "liked"){
+                                    userId?.let { it1 -> viewModel.getFriends(it1) }
+                                    binding.root.snacked("Friends Liked")
+                                }
+                                if (it.message == "disliked"){
+                                    userId?.let { it1 -> viewModel.getFriends(it1) }
+                                    binding.root.snacked("Friends Disliked")
+                                }
                                 loadingDialog.dismiss()
-                                loadingDialog.setResponse(it.message ?: return@collect)
-
                             }
                             ApiStatus.ERROR -> {
                                 disconnect(it)
@@ -118,17 +99,14 @@ class DetailFriendsActivity :
                     }
                 }
                 launch {
-                    viewModel.friends.collect{ friends ->
-                        friend = friends
+                    viewModel.friends.collect { friends ->
                         binding.user = friends
                         phone = friends?.nomorTelepon
                         userId = friends?.userId
                         userLike = friends?.likeByYou
 
-                        Log.d("cek nomor","cek nomor : $phone")
                     }
                 }
-
             }
         }
     }
@@ -141,12 +119,13 @@ class DetailFriendsActivity :
     }
 
     private fun likeDislike() {
-        if (userLike == true){
+        if (userLike != true) {
             userId?.let { viewModel.like(it) }
-            setResult(Const.RELOAD)
-        }else{
+            setResult(6100)
+        } else {
             viewModel.dislike(userId)
-            setResult(Const.RELOAD)
+            setResult(6100)
+
         }
 
     }

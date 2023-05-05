@@ -2,15 +2,22 @@ package com.bennohan.kelasku.ui.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.Session
 import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityProfileBinding
 import com.bennohan.kelasku.ui.editProfile.EditProfileActivity
+import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.extension.createIntent
+import com.crocodic.core.extension.tos
 import com.crocodic.core.helper.ImagePreviewHelper
+import com.crocodic.core.helper.log.Log
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +30,7 @@ class ProfileActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getUser()
+        observe()
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
@@ -42,16 +50,49 @@ class ProfileActivity :
             activityLauncher.launch(createIntent<EditProfileActivity>()) {
                 if (it.resultCode == 6100) {
                     getUser()
+                    observe()
+                    tos("pp")
                 }
+                android.util.Log.d("cek resultCode", "${it.resultCode}")
+
             }
         }
 
 
     }
 
+    private fun observe() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.apiResponse.collect {
+                        when (it.status) {
+                            ApiStatus.LOADING -> loadingDialog.show()
+                            ApiStatus.SUCCESS ->{
+                                loadingDialog.dismiss()
+                                loadingDialog.setResponse(it.message ?: return@collect)
+                                val user = session.getUser()
+                                binding.user = user
+
+                            }
+                            ApiStatus.ERROR -> {
+                                disconnect(it)
+                                loadingDialog.setResponse(it.message ?: return@collect)
+
+                            }
+                            else -> loadingDialog.setResponse(it.message ?: return@collect)
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun getUser() {
         val user = session.getUser()
         binding.user = user
+        viewModel.getUser()
         setResult(Const.RELOAD)
 
     }

@@ -27,11 +27,8 @@ import com.bennohan.kelasku.R
 import com.bennohan.kelasku.base.BaseActivity
 import com.bennohan.kelasku.data.School
 import com.bennohan.kelasku.data.Session
-import com.bennohan.kelasku.data.constant.Const
 import com.bennohan.kelasku.databinding.ActivityEditProfileBinding
-import com.bennohan.kelasku.ui.profile.ProfileActivity
 import com.crocodic.core.api.ApiStatus
-import com.crocodic.core.extension.openActivity
 import com.crocodic.core.extension.snacked
 import com.crocodic.core.extension.textOf
 import com.crocodic.core.extension.tos
@@ -102,6 +99,7 @@ class EditProfileActivity :
         val user = session.getUser()
         school = user?.sekolahId
         binding.user = user
+        setResult(6100)
     }
 
     private fun getListSchool() {
@@ -123,8 +121,6 @@ class EditProfileActivity :
         } else {
             viewModel.editProfile(name, schoolId)
         }
-
-
 
         Log.d("cekSchool1", "cekSchool1 : ${this.school}")
         Log.d("cekSchoolId", "cekSchoolId : $schoolId")

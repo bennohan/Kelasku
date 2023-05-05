@@ -1,6 +1,5 @@
 package com.bennohan.kelasku.ui.detailFriends
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.bennohan.kelasku.api.ApiService
 import com.bennohan.kelasku.base.BaseViewModel
@@ -26,19 +25,11 @@ class DetailFriendsViewModel @Inject constructor(
     private var _friends = MutableSharedFlow<User?>()
     var friends = _friends.asSharedFlow()
 
-    protected val _apiResponselike = MutableSharedFlow<ApiResponse>() // private mutable shared flow
-    val apiResponselike = _apiResponselike.asSharedFlow()
-
-    protected val _apiResponsedislike = MutableSharedFlow<ApiResponse>() // private mutable shared flow
-    val apiResponsedislike = _apiResponsedislike.asSharedFlow()
-
-
     fun getFriends(id: Int) = viewModelScope.launch {
         ApiObserver({ apiService.getUserId(id) },
             false, object : ApiObserver.ResponseListener {
                 override suspend fun onSuccess(response: JSONObject) {
                     val data = response.getJSONObject(ApiCode.DATA).toObject<User>(gson)
-                    Log.d("check data","check data $data")
                     _apiResponse.emit(ApiResponse().responseSuccess())
                     _friends.emit(data)
                 }
@@ -70,8 +61,7 @@ class DetailFriendsViewModel @Inject constructor(
         ApiObserver({ apiService.likeUser(userId) },
             false, object : ApiObserver.ResponseListener {
                 override suspend fun onSuccess(response: JSONObject) {
-                    _apiResponse.emit(ApiResponse().responseSuccess())
-                    _apiResponselike.emit(ApiResponse().responseSuccess())
+                    _apiResponse.emit(ApiResponse().responseSuccess("liked"))
 
                 }
 
@@ -86,8 +76,7 @@ class DetailFriendsViewModel @Inject constructor(
         ApiObserver({ apiService.dislikeUser(userId) },
             false, object : ApiObserver.ResponseListener {
                 override suspend fun onSuccess(response: JSONObject) {
-                    _apiResponse.emit(ApiResponse().responseSuccess())
-                    _apiResponsedislike.emit(ApiResponse().responseSuccess())
+                    _apiResponse.emit(ApiResponse().responseSuccess("disliked"))
                 }
                 override suspend fun onError(response: ApiResponse) {
                     super.onError(response)

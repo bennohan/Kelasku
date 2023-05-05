@@ -7,10 +7,12 @@
     <item
         android:id="@+id/nav_favourite"
         android:icon="@drawable/ic_baseline_favorite_24"
+        android:iconTint="@color/text_red"
         android:title="@string/favourite" />
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_baseline_logout_24"
+        android:iconTint="@color/my_hint_color"
         android:title="@string/logout"/>
 
 </menu>
