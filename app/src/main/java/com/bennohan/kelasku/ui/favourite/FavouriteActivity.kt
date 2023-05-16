@@ -1,8 +1,11 @@
 package com.bennohan.kelasku.ui.favourite
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,7 +19,6 @@ import com.bennohan.kelasku.ui.detailFriends.DetailFriendsActivity
 import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.base.adapter.ReactiveListAdapter
 import com.crocodic.core.extension.openActivity
-import com.crocodic.core.helper.log.Log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -58,7 +60,7 @@ class FavouriteActivity : BaseActivity<ActivityFavouriteBinding,FavouriteViewMod
         super.onCreate(savedInstanceState)
         binding.rvUser.adapter = adapterUser
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
         observe()
         getListUser()
@@ -68,6 +70,7 @@ class FavouriteActivity : BaseActivity<ActivityFavouriteBinding,FavouriteViewMod
         }
 
         binding.refreshLayout.setOnRefreshListener {
+            getListUser()
             observe()
         }
 

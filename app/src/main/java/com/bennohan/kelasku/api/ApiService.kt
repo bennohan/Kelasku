@@ -24,7 +24,6 @@ interface ApiService {
     @POST("api/data_user")
     suspend fun getUser(): String
 
-    //login
     @FormUrlEncoded
     @POST("api/register")
     suspend fun register(
@@ -46,16 +45,6 @@ interface ApiService {
     suspend fun getUserId(
         @Path("user_id")user_id : Int?
     ): String
-
-//    @FormUrlEncoded
-//    @POST("api/bennotif")
-//    suspend fun getNotification(
-//        @Field("user_id")user_id : Int?
-////        @Header("Authorization") auth : String,
-////        @Field("to") toDeviceToken : String?,
-////        @Field("title") notificationTitle : String,
-////        @Field("body") body : String
-//    ): String
 
     @FormUrlEncoded
     @POST("api/editprofile")

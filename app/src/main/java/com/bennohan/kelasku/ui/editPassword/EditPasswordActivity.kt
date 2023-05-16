@@ -1,7 +1,12 @@
 package com.bennohan.kelasku.ui.editPassword
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -13,6 +18,7 @@ import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.extension.isEmptyRequired
 import com.crocodic.core.extension.snacked
 import com.crocodic.core.extension.textOf
+import com.crocodic.core.extension.tos
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,16 +32,25 @@ class EditPasswordActivity : BaseActivity<ActivityEditPasswordBinding,EditPasswo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
 
         getUser()
         observe()
 
+        binding.btnBack.setOnClickListener {
+            @Suppress("DEPRECATION")
+            onBackPressed()
+        }
+
         binding.btnEditPassword.setOnClickListener {
             editPassword()
         }
         binding.btnBack.setOnClickListener {
+            if(binding.etCurrentPassword.textOf().isNotEmpty() || binding.etPasswordNew.textOf().isNotEmpty() || binding.etConfirmPass.textOf().isNotEmpty()){
+                unsavedAlert()
+                return@setOnClickListener
+            }
             finish()
         }
 
@@ -51,17 +66,16 @@ class EditPasswordActivity : BaseActivity<ActivityEditPasswordBinding,EditPasswo
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.apiResponse.collect {
-                        //when(it.message){}
                         when (it.status) {
                             ApiStatus.LOADING -> loadingDialog.show("Updating")
                             ApiStatus.SUCCESS -> {
                                 loadingDialog.dismiss()
-                                loadingDialog.setResponse(it.message ?: return@collect)
-                                binding.root.snacked("Updating Success")
+                                tos("Updating Success")
+                                finish()
                             }
                             ApiStatus.ERROR -> {
                                 disconnect(it)
-                                binding.root.snacked("Updating Failed")
+                                binding.root.snacked(it.message ?: return@collect)
                                 loadingDialog.setResponse(it.message ?: return@collect)
                             }
                             else -> loadingDialog.setResponse(it.message ?: return@collect)
@@ -103,6 +117,38 @@ class EditPasswordActivity : BaseActivity<ActivityEditPasswordBinding,EditPasswo
 
 
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if(binding.etCurrentPassword.textOf().isNotEmpty() || binding.etPasswordNew.textOf().isNotEmpty() || binding.etConfirmPass.textOf().isNotEmpty()){
+            unsavedAlert()
+            return
+        }
+        finish()
+    }
+
+
+    private fun unsavedAlert(){
+        val builder = AlertDialog.Builder(this@EditPasswordActivity)
+        builder.setTitle("Unsaved Changes")
+        builder.setMessage("You have unsaved changes. Are you sure you want to Dismiss changes?.")
+            .setPositiveButton("Dismiss") { _, _ ->
+                this@EditPasswordActivity.finish()
+            }
+            .setNegativeButton("Keep Editing") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val dialog: AlertDialog = builder.create()
+
+        // Set the color of the positive button text
+        dialog.setOnShowListener {
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.my_hint_color))
+        }
+        dialog.show()
+
+    }
+
 
 
 }

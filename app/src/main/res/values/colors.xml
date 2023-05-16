@@ -10,4 +10,5 @@
 <!--    <color name="my_text_color"></color>-->
     <color name="my_hint_color">#0D7E41</color>
     <color name="main_background_color">#EFF2F0</color>
+    <color name="transparent">#00EFF2F0</color>
 </resources>

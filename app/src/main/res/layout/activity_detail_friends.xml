@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="user"
             type="com.bennohan.kelasku.data.User" />
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#EFF2F0"
         android:layout_height="match_parent"
+        android:background="#EFF2F0"
         tools:context=".ui.detailFriends.DetailFriendsActivity">
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
-            android:background="@null"
             android:layout_margin="@dimen/_16sdp"
+            android:background="@null"
             android:contentDescription="@string/return_button"
             android:foreground="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_baseline_arrow_back_24"
@@ -49,53 +50,53 @@
             android:layout_height="25dp"
             android:layout_margin="@dimen/_16sdp"
             android:background="@null"
-            android:src='@{user.likeByYou ? @drawable/ic_baseline_favorite_24 : @drawable/ic_baseline_favorite_border_24}'
             android:contentDescription="@string/like_button"
             android:foreground="?selectableItemBackgroundBorderless"
+            android:src='@{user.likeByYou ? @drawable/ic_baseline_favorite_24 : @drawable/ic_baseline_favorite_border_24}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/btnDislike"-->
-<!--            android:layout_width="@dimen/_25sdp"-->
-<!--            android:layout_height="@dimen/_25sdp"-->
-<!--            android:src="@drawable/ic_baseline_favorite_border_24"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            android:foreground="?selectableItemBackgroundBorderless"-->
-<!--            android:layout_margin="@dimen/_16sdp"-->
-<!--            android:background="#0003DAC5"-->
-<!--            android:contentDescription="@string/dislike_button"-->
-<!--            android:visibility='@{user.likeByYou ? View.INVISIBLE : View.VISIBLE}'-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/btnDislike"-->
+        <!--            android:layout_width="@dimen/_25sdp"-->
+        <!--            android:layout_height="@dimen/_25sdp"-->
+        <!--            android:src="@drawable/ic_baseline_favorite_border_24"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            android:foreground="?selectableItemBackgroundBorderless"-->
+        <!--            android:layout_margin="@dimen/_16sdp"-->
+        <!--            android:background="#0003DAC5"-->
+        <!--            android:contentDescription="@string/dislike_button"-->
+        <!--            android:visibility='@{user.likeByYou ? View.INVISIBLE : View.VISIBLE}'-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
 
         <ImageView
             android:id="@+id/ivProfile"
+            imageUrlCircle='@{user.foto}'
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_90sdp"
             android:layout_marginTop="@dimen/_60sdp"
-            tools:src="@drawable/ic_baseline_person_24"
-            imageUrlCircle='@{user.foto}'
             android:contentDescription="@string/image_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_baseline_person_24" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_31sdp"
             android:layout_marginTop="@dimen/_25sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:text="@string/name"
             android:textColor="#0D7E41"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
-            android:layout_marginStart="@dimen/_31sdp"
+            app:drawableStartCompat="@drawable/person_vector"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivProfile"
-            app:drawableStartCompat="@drawable/person_vector" />
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
         <TextView
             android:id="@+id/tvName"
@@ -103,22 +104,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_70sdp"
             android:layout_marginTop="@dimen/_12sdp"
-            tools:text="Mark Lee"
             android:text='@{user.nama}'
             android:textColor="@color/black"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            tools:text="Mark Lee" />
 
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/black"
             android:layout_marginStart="@dimen/_31sdp"
-            android:layout_marginEnd="@dimen/_31sdp"
             android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_31sdp"
+            android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/tvName"
             tools:layout_editor_absoluteX="40dp" />
 
@@ -127,15 +128,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_31sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:text="@string/school"
-            android:layout_marginTop="@dimen/_16sdp"
             android:textColor="#0D7E41"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
+            app:drawableStartCompat="@drawable/school_vector"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:drawableStartCompat="@drawable/school_vector" />
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <TextView
             android:id="@+id/tvSchool"
@@ -143,21 +144,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_70sdp"
             android:layout_marginTop="@dimen/_12sdp"
-            tools:text="High School"
             android:text='@{user.namaSekolah}'
             android:textColor="@color/black"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            tools:text="High School" />
 
         <View
             android:id="@+id/view1"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="@dimen/_31sdp"
-            android:layout_marginEnd="@dimen/_31sdp"
             android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_31sdp"
             android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/tvSchool" />
 
@@ -166,15 +167,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_31sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:drawablePadding="@dimen/_15sdp"
             android:text="@string/telephone"
-            android:layout_marginTop="@dimen/_16sdp"
             android:textColor="#0D7E41"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
+            app:drawableStartCompat="@drawable/phone_vector"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1"
-            app:drawableStartCompat="@drawable/phone_vector" />
+            app:layout_constraintTop_toBottomOf="@+id/view1" />
 
         <TextView
             android:id="@+id/tvPhone"
@@ -182,20 +183,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_70sdp"
             android:layout_marginTop="@dimen/_12sdp"
-            tools:text="0813 7766 4356"
             android:text='@{user.nomorTelepon}'
             android:textColor="@color/black"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            tools:text="0813 7766 4356" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="@dimen/_31sdp"
-            android:layout_marginEnd="@dimen/_31sdp"
             android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_31sdp"
             android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/tvPhone" />
 
@@ -203,14 +204,14 @@
             android:id="@+id/btnWhatsapp"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_42sdp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/button_whatsapp_background"
+            android:drawableStart="@drawable/image_whatsapp"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:gravity="center_vertical"
             android:paddingStart="@dimen/_35sdp"
             android:paddingEnd="@dimen/_35sdp"
-            android:layout_marginBottom="44dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/button_whatsapp_background"
             android:text="@string/whats_app"
-            android:foreground="?selectableItemBackgroundBorderless"
-            android:drawableStart="@drawable/image_whatsapp"
             android:textAllCaps="false"
             android:textColor="@color/my_hint_color"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -221,15 +222,15 @@
             android:id="@+id/btnColek"
             android:layout_width="@dimen/_125sdp"
             android:layout_height="@dimen/_42sdp"
-            android:background="@drawable/button_background"
-            android:text="@string/colek"
-            android:foreground="?selectableItemBackgroundBorderless"
             android:layout_marginBottom="44dp"
-            app:layout_constraintStart_toEndOf="@id/btnWhatsapp"
+            android:background="@drawable/button_background"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:text="@string/colek"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnWhatsapp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

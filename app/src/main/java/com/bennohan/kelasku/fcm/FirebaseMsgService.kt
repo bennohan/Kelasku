@@ -16,8 +16,6 @@ import com.bennohan.kelasku.ui.home.HomeActivity
 import com.crocodic.core.helper.DateTimeHelper
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.gson.Gson
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 class FirebaseMsgService : FirebaseMessagingService() {
@@ -47,9 +45,6 @@ class FirebaseMsgService : FirebaseMessagingService() {
             message.data["title"] ?: return,
             message.data["body"] ?: return,
             message.data["user_id"] ?: return,
-//                message.data["title"] ?:return,
-//                message.notification!!.title!!,
-//                message.notification!!.body!!
             //todo:title mengambil titlenya, body itu messagenya
         )
 
@@ -60,7 +55,7 @@ class FirebaseMsgService : FirebaseMessagingService() {
 
 private fun sendRegistrationToServer(token: String?) {
     // TODO: Implement this method to send token to your app server.
-    //todo: untuk mengirim device tokennya, tapi home sudah ngambil dan mengirim...ini hanya untuk mengeceknya
+    //todo: untuk mengirim device tokennya, Dipindah Ke Home
 //    Log.d(TAG, "sendRegistrationTokenToServer($token)")
 }
 
@@ -85,10 +80,10 @@ fun showNotification(context: Context, title: String, message: String, userId: S
         notificationManager.createNotificationChannel(channel)
     }
 
-    val homeIntent = Intent(context, HomeActivity::class.java)
 
     //todo: untuk edit titile, masage, logo
     // todo:Builder
+    val homeIntent = Intent(context, HomeActivity::class.java)
     val detailIntent = Intent(context, DetailFriendsActivity::class.java).apply {
         putExtra(Const.FRIENDS.ID, userId.toInt())
         Log.d("cek Id", "cek Id : $userId")
@@ -102,7 +97,7 @@ fun showNotification(context: Context, title: String, message: String, userId: S
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_UPDATE_CURRENT)
 
     val stackBuilder = TaskStackBuilder.create(context)
-    stackBuilder.addNextIntent(homeIntent)
+//    stackBuilder.addNextIntent(homeIntent)
     stackBuilder.addNextIntent(detailIntent)
     resultPendingIntent = stackBuilder.getPendingIntent(
         1,

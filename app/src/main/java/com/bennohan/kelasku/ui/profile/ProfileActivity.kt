@@ -1,7 +1,10 @@
 package com.bennohan.kelasku.ui.profile
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -13,9 +16,7 @@ import com.bennohan.kelasku.databinding.ActivityProfileBinding
 import com.bennohan.kelasku.ui.editProfile.EditProfileActivity
 import com.crocodic.core.api.ApiStatus
 import com.crocodic.core.extension.createIntent
-import com.crocodic.core.extension.tos
 import com.crocodic.core.helper.ImagePreviewHelper
-import com.crocodic.core.helper.log.Log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class ProfileActivity :
         getUser()
         observe()
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
 
         binding.btnBack.setOnClickListener {
@@ -52,8 +53,6 @@ class ProfileActivity :
                     getUser()
                     observe()
                 }
-                android.util.Log.d("cek resultCode", "${it.resultCode}")
-
             }
         }
 
@@ -96,11 +95,6 @@ class ProfileActivity :
 
     private fun getUser() {
         viewModel.getUser()
-//        val user = session.getUser()
-//        binding.user = user
-//        binding.tvName.text = user?.nama
-//        binding.tvSchool.text = user?.namaSekolah
-//        tos("getuser")
         setResult(Const.RELOAD)
 
     }

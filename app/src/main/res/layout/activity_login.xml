@@ -6,14 +6,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.login.LoginActivity"
-        android:background="#EFF2F0">
+        android:background="#EFF2F0"
+        tools:context=".ui.login.LoginActivity">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="@dimen/_45sdp"
             android:text="@string/welcome_back"
             android:textColor="@color/black"
             android:textSize="@dimen/_20sdp"
@@ -29,54 +29,54 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="@string/fill_your_details_or_continue_with_register"
-            android:textSize="@dimen/_18sdp"
             android:textColor="#323131"
+            android:textSize="@dimen/_18sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputPhone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginStart="28dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_marginEnd="@dimen/_28sdp"
             android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_28sdp"
             android:textColorHint="@color/my_hint_color"
-            app:startIconDrawable="@drawable/phone_vector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:startIconDrawable="@drawable/phone_vector">
 
             <EditText
                 android:id="@+id/etPhone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:hint="@string/nomor_telephone"
                 android:autofillHints="phone"
-                android:textColor="@color/black"
                 android:background="@drawable/edittext_background"
+                android:hint="@string/nomor_telephone"
                 android:inputType="phone"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
-            android:layout_marginTop="@dimen/_30sdp"
             android:layout_marginStart="28dp"
-            app:startIconDrawable="@drawable/password_vector"
+            android:layout_marginTop="@dimen/_30sdp"
             android:layout_marginEnd="@dimen/_28sdp"
             android:textColor="@color/black"
             android:textColorHint="@color/my_hint_color"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputPhone"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/password_vector">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
@@ -85,9 +85,9 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/password"
-                android:textColorHint="@color/black"
-                android:textColor="@color/black"
                 android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,7 +108,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <TextView
-            android:id="@+id/tvDontHaveAccount"
+            android:id="@+id/tvSignUpOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="196dp"

@@ -24,8 +24,8 @@ class ProfileViewModel @Inject constructor(
     private val session: Session,
     ) : BaseViewModel() {
 
-    private var _User = MutableSharedFlow<User?>()
-    var user = _User.asSharedFlow()
+    private var _user = MutableSharedFlow<User?>()
+    var user = _user.asSharedFlow()
 
 
     //getUser
@@ -38,7 +38,7 @@ class ProfileViewModel @Inject constructor(
                     val data = response.getJSONObject(ApiCode.DATA).toObject<User>(gson)
                     session.saveUser(data)
                     _apiResponse.emit(ApiResponse().responseSuccess())
-                    _User.emit(data)
+                    _user.emit(data)
 
                 }
 

@@ -13,5 +13,6 @@
         <item name="android:statusBarColor">#EFF2F0</item>
         <item name="android:textColorHint">@color/text_green</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

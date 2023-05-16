@@ -14,8 +14,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
+import android.view.WindowInsetsController
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -31,6 +31,7 @@ import com.bennohan.kelasku.data.School
 import com.bennohan.kelasku.data.Session
 import com.bennohan.kelasku.databinding.ActivityEditProfileBinding
 import com.crocodic.core.api.ApiStatus
+import com.crocodic.core.extension.isEmptyRequired
 import com.crocodic.core.extension.snacked
 import com.crocodic.core.extension.textOf
 import com.crocodic.core.extension.tos
@@ -59,13 +60,15 @@ class EditProfileActivity :
 
     private var userName: String? = null
     private var school: Int? = null
+    private var schoolName: String? = null
     private var filePhoto: File? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
+
 
 
         getUser()
@@ -74,19 +77,8 @@ class EditProfileActivity :
         getListSchool()
 
         binding.btnBack.setOnClickListener {
-            if (filePhoto != null ) {
-                unsavedAlret()
-                return@setOnClickListener
-            }
-            if (binding.etName.textOf().isNotEmpty() && binding.etName.textOf() != userName) {
-                unsavedAlret()
-                return@setOnClickListener
-            }
-            if (schoolId != null){
-                unsavedAlret()
-                return@setOnClickListener
-            }
-            finish()
+            @Suppress("DEPRECATION")
+            onBackPressed()
         }
 
         binding.btnSave.setOnClickListener {
@@ -98,6 +90,7 @@ class EditProfileActivity :
         }
 
         binding.btnPhoto.setOnClickListener {
+            validateForm()
             if (checkPermissionGallery()) {
                 openGallery()
             } else {
@@ -105,6 +98,19 @@ class EditProfileActivity :
             }
         }
 
+
+    }
+    //TODO Must Test
+    private fun validateForm() {
+            val name = binding.etName.textOf()
+
+            if (name.isEmpty()) {
+                binding.etName.isEmptyRequired(R.string.mustFill)
+            }
+
+            if (schoolId.isNullOrEmpty()) {
+                binding.autoCompleteSpinner.isEmptyRequired(R.string.mustFill)
+            }
     }
 
 
@@ -112,6 +118,7 @@ class EditProfileActivity :
         val user = session.getUser()
         school = user?.sekolahId
         userName = user?.nama
+        schoolName = user?.namaSekolah
         binding.user = user
         setResult(6100)
     }
@@ -123,9 +130,8 @@ class EditProfileActivity :
 
     private fun editProfile() {
         val name = binding.etName.textOf()
-        Log.d("cek name", "$userName")
 
-        if (schoolId.isNullOrEmpty() && name.isNullOrEmpty()) {
+        if (schoolId.isNullOrEmpty() && name.isEmpty()) {
             binding.root.snacked("data tidak ada perubahan")
             return
         }
@@ -141,20 +147,13 @@ class EditProfileActivity :
             viewModel.editProfile(name, schoolId)
         }
 
-        Log.d("cekSchool1", "cekSchool1 : ${this.school}")
-        Log.d("cekSchoolId", "cekSchoolId : $schoolId")
     }
 
     private fun editProfilePhoto() {
         val name = binding.etName.textOf()
 
-//        if (schoolId.isNullOrEmpty() && name.isNullOrEmpty()) {
-//            tos("data tidak ada perubahan")
-//        }
-
         lifecycleScope.launch {
             val compressesFile = compressFile(filePhoto!!)
-            Log.d("Compress", "File: $compressesFile")
             if (compressesFile != null) {
                 if (schoolId.isNullOrEmpty()) {
                     viewModel.updateUserWithPhoto(
@@ -178,8 +177,9 @@ class EditProfileActivity :
                 launch {
                     viewModel.apiResponse.collect {
                         when (it.status) {
-                            ApiStatus.LOADING -> loadingDialog.show("Updating...")
+                            ApiStatus.LOADING -> loadingDialog.show()
                             ApiStatus.SUCCESS -> {
+                                tos("Profile Updated")
                                 loadingDialog.dismiss()
                                 setResult(6100)
                                 finish()
@@ -208,17 +208,19 @@ class EditProfileActivity :
     private fun autocompleteSpinner() {
         val autoCompleteSpinner = findViewById<AutoCompleteTextView>(R.id.autoCompleteSpinner)
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, dataSchool)
+        autoCompleteSpinner.setText(schoolName)
         autoCompleteSpinner.setAdapter(adapter)
 
 
         // Show the dropdown list when the AutoCompleteTextView is clicked
         autoCompleteSpinner.setOnClickListener {
             autoCompleteSpinner.showDropDown()
-            autoCompleteSpinner.setDropDownVerticalOffset(-autoCompleteSpinner.height)
+//            autoCompleteSpinner.setDropDownVerticalOffset(-autoCompleteSpinner.height)
+            autoCompleteSpinner.dropDownVerticalOffset = -autoCompleteSpinner.height
 
         }
 
-        autoCompleteSpinner.setOnItemClickListener { parent, view, position, id ->
+        autoCompleteSpinner.setOnItemClickListener { _, _, position, _ ->
             // Handle item selection here
             val selectedItem = dataSchool[position]
             schoolId = selectedItem?.sekolahId.toString()
@@ -314,7 +316,6 @@ class EditProfileActivity :
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
             binding.ivProfile.setImageBitmap(bitmap)
             filePhoto = file
-            Log.d("checkfile", "file : $filePhoto")
         } catch (e: Exception) {
             e.printStackTrace()
             binding.root.snacked("File ini tidak dapat digunakan")
@@ -388,6 +389,7 @@ class EditProfileActivity :
         // external storage.
         val file = File(getExternalFilesDir(albumName), subAlbumName)
         if (!file.mkdirs()) {
+         //do nothing
         }
         return file
     }
@@ -411,30 +413,31 @@ class EditProfileActivity :
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (filePhoto != null ) {
-            unsavedAlret()
+            unsavedAlert()
             return
         }
         if (binding.etName.textOf().isNotEmpty() && binding.etName.textOf() != userName) {
-            unsavedAlret()
+            unsavedAlert()
             return
         }
-        if (schoolId != null){
-            unsavedAlret()
+        if (schoolId != null || binding.autoCompleteSpinner.textOf() != schoolName ){
+            unsavedAlert()
             return
         }
         finish()
     }
 
-    private fun unsavedAlret(){
+    private fun unsavedAlert(){
         val builder = AlertDialog.Builder(this@EditProfileActivity)
         builder.setTitle("Unsaved Changes")
-        builder.setMessage("You have unsaved changes. Are you sure you want to Abandon changes?.")
-            .setPositiveButton("Abandon") { dialog, id ->
+        builder.setMessage("You have unsaved changes. Are you sure you want to Dismiss changes?.")
+            .setPositiveButton("Dismiss") { _, _ ->
                 this@EditProfileActivity.finish()
             }
-            .setNegativeButton("Keep Editing") { dialog, id ->
+            .setNegativeButton("Keep Editing") { dialog, _ ->
                 dialog.dismiss()
             }
         val dialog: AlertDialog = builder.create()

@@ -41,6 +41,4 @@ data class User(
     @Expose
     @SerializedName("like_by_you")
     var likeByYou : Boolean?
-) : Parcelable{
-
-}
+) : Parcelable

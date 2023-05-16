@@ -7,7 +7,6 @@ object Const {
     }
     object FRIENDS {
         const val ID = "user_id"
-        const val FRIENDS_DEVICE_TOKEN = "device_token"
     }
     const val RELOAD = 6100
 }

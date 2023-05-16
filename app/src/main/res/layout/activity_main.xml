@@ -61,7 +61,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
-                android:text="@string/consectetur_adipiscing_elit_duis_tristique_sollicitudin_nibh_sit_amet_commodo_nulla_facilisi_nullam_vehicula_ipsum_a_arcu_cursus_vitae_congue"
+                android:text="@string/splash_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />

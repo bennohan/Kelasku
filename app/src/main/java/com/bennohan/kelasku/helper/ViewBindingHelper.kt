@@ -28,6 +28,7 @@ class ViewBindingHelper {
                     Glide
                         .with(view.context)
                         .load(imageUrl)
+                        .apply(RequestOptions.centerCropTransform())
                         .placeholder(R.drawable.ic_baseline_person_24)
                         .into(view)
 
@@ -42,21 +43,11 @@ class ViewBindingHelper {
 
             view.setImageDrawable(null)
 
-//            imageUrl?.let {
-//                Glide
-//                    .with(view.context)
-//                    .load(imageUrl)
-//                    .apply(RequestOptions.circleCropTransform())
-//                    .placeholder(R.drawable.ic_baseline_person_24)
-//                    .into(view)
-//
-//
-//            }
             if (imageUrl.isNullOrEmpty()) {
                 Glide
                     .with(view.context)
                     .load(imageUrl)
-                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.circleCropTransform())
                     .placeholder(R.drawable.ic_baseline_person_24)
                     .into(view)
 

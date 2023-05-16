@@ -17,8 +17,8 @@
             android:layout_marginTop="22dp"
             android:background="@null"
             android:contentDescription="@string/return_button"
-            android:scaleType="fitXY"
             android:foreground="?selectableItemBackgroundBorderless"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_arrow_back_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,19 +31,20 @@
             android:layout_marginTop="22dp"
             android:text="@string/register_account"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="@dimen/_18sdp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="@dimen/_160sdp"
+            android:layout_width="@dimen/_180sdp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/fill_your_details_to_register_account"
             android:textColor="#323131"
-            android:text="@string/fill_your_details_or_continue_with_social_media"
+            android:textSize="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -55,7 +56,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_22sdp"
             android:layout_marginEnd="@dimen/_20sdp"
-            app:hintTextColor="@color/my_hint_color"
+            android:textColorHint="@color/my_hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
@@ -67,8 +68,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/nama"
-                android:textColor="@color/black"
                 android:inputType="text"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -81,9 +82,10 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_20sdp"
+            android:textColorHint="@color/my_hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputName"
-            app:startIconDrawable="@drawable/telephoneup_vector">
+            app:startIconDrawable="@drawable/telephone_vector">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPhone"
@@ -99,27 +101,27 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputSchool"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_13sdp"
-            app:startIconDrawable="@drawable/school_vector"
             android:layout_marginEnd="@dimen/_20sdp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:background="@drawable/edittext_background"
-            app:layout_constraintEnd_toEndOf="parent"
             app:hintTextColor="@color/black"
-
-            app:layout_constraintTop_toBottomOf="@id/textInputPhone">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputPhone"
+            android:textColorHint="@color/my_hint_color"
+            app:startIconDrawable="@drawable/school_vector">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteSpinner"
                 android:layout_width="match_parent"
-                android:background="#00CD1430"
-                android:hint="@string/school"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:dropDownAnchor="@id/autoCompleteSpinner" />
+                android:background="#00CD1430"
+                android:dropDownAnchor="@id/autoCompleteSpinner"
+                android:hint="@string/school"
+                android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,6 +133,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_20sdp"
+            android:textColorHint="@color/my_hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputSchool"
@@ -143,8 +146,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/password"
-                android:textColor="@color/black"
                 android:inputType="textPassword"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -158,6 +161,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_20sdp"
             app:layout_constraintEnd_toEndOf="parent"
+            android:textColorHint="@color/my_hint_color"
             app:layout_constraintTop_toBottomOf="@id/textInputPassword"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/password_vector">
@@ -168,8 +172,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/confirm_password"
-                android:textColor="@color/black"
                 android:inputType="textPassword"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -180,9 +184,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_25sdp"
             android:text="@string/password_did_t_match"
+            android:textColor="@color/text_red"
             android:textSize="@dimen/_13sdp"
             android:visibility="gone"
-            android:textColor="@color/text_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputConfirmPassword" />
 
@@ -192,9 +196,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_25sdp"
             android:text="@string/password_must_be_6_characters_long"
+            android:textColor="@color/text_red"
             android:textSize="@dimen/_13sdp"
             android:visibility="gone"
-            android:textColor="@color/text_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputConfirmPassword" />
 
@@ -203,15 +207,15 @@
             android:layout_width="@dimen/_270sdp"
             android:layout_height="@dimen/_48sdp"
             android:layout_gravity="center"
-            android:background="@drawable/button_background"
             android:layout_marginTop="@dimen/_55sdp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_17sdp"
-            android:foreground="?selectableItemBackgroundBorderless"
+            android:background="@drawable/button_background"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?selectableItemBackgroundBorderless"
             android:text="@string/register"
             android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_17sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputConfirmPassword" />

@@ -3,6 +3,7 @@
     <string name="mustFill">Wajib Diisi</string>
     <string name="mustFillCurrentPassword">Masukan Password Lama Anda</string>
     <string name="mustFillNewPassword">Masukan Password Baru Anda</string>
+    <string name="mustFillPassword">Password Tidak Boleh Kosong</string>
     <string name="mustFillConfirmPassword">Konfirmasi Password Baru Anda</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -12,7 +13,7 @@
     <string name="edit_password">Edit Password</string>
     <string name="whats_app">Whats App</string>
     <string name="return_button">Return Button</string>
-    <string name="consectetur_adipiscing_elit_duis_tristique_sollicitudin_nibh_sit_amet_commodo_nulla_facilisi_nullam_vehicula_ipsum_a_arcu_cursus_vitae_congue">consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue</string>
+    <string name="splash_description">consectetur adipiscing elit duis tristique sollicitudin nibh sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue</string>
     <string name="lets_get_started">Lets Get Started</string>
     <string name="welcome_to_kelasku_app">Welcome to Kelasku App</string>
     <string name="image_splash">Image Splash</string>
@@ -52,4 +53,7 @@
     <string name="fill_your_details_or_continue_with_register">Fill your details or continue with register</string>
     <string name="don_t_have_an_account_sign_up">Don\'t Have an Account Sign Up</string>
     <string name="sign_in">Sign in</string>
+    <string name="pencarian_tidak_ditemukan">Pencarian Tidak Ditemukan</string>
+    <string name="fill_your_details_to_register_account">Fill your details to register account</string>
+    <string name="kelasku">Kelasku</string>
 </resources>

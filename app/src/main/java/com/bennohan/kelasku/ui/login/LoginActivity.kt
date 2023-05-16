@@ -1,13 +1,18 @@
 package com.bennohan.kelasku.ui.login
 
 import android.content.ContentValues
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
+import android.view.WindowInsetsController
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -36,7 +41,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>(R.layout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
 
         observe()
@@ -67,15 +72,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>(R.layout
             return
         }
 
-        if (password.length >= 6) {
-            // password meets minimum length requirement, continue with setting the password
-            viewModel.login(phone,password,deviceToken)
-        } else {
-            // password does not meet minimum length requirement, show error message
-            tos("password tidak sama")
-            TODO()
-        }
-
+        viewModel.login(phone,password,deviceToken)
     }
 
     private fun tvRegister(){
@@ -86,8 +83,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>(R.layout
             }
         }
         spannableString.setSpan(clickableSpan, 22, spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.tvDontHaveAccount.text = spannableString
-        binding.tvDontHaveAccount.movementMethod = LinkMovementMethod.getInstance() // Required for clickable spans to work
+        binding.tvSignUpOption.text = spannableString
+        binding.tvSignUpOption.movementMethod = LinkMovementMethod.getInstance() // Required for clickable spans to work
 
     }
 
@@ -96,7 +93,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>(R.layout
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.apiResponse.collect {
-                        //when(it.message){}
                         when (it.status) {
                             ApiStatus.LOADING -> loadingDialog.show("login...in")
                             ApiStatus.SUCCESS -> {
@@ -120,7 +116,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>(R.layout
     private fun generateFcmToken ( result:( Boolean )-> Unit) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+//                Log.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
                 result(false)
                 return@OnCompleteListener
             }

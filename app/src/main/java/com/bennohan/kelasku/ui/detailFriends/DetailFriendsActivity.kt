@@ -2,8 +2,11 @@ package com.bennohan.kelasku.ui.detailFriends
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -34,7 +37,8 @@ class DetailFriendsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
         observe()
         getFriends()
@@ -48,7 +52,6 @@ class DetailFriendsActivity :
         }
 
         binding.btnColek.setOnClickListener {
-            tos("clicked")
             colek()
         }
 
@@ -70,6 +73,7 @@ class DetailFriendsActivity :
 
     private fun colek() {
         viewModel.getNotificationColek(userId)
+        binding.root.snacked("Teman di colek")
     }
 
     private fun observe() {

@@ -1,13 +1,12 @@
 package com.bennohan.kelasku.ui.home
 
-import android.app.AlertDialog
 import android.Manifest
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -50,7 +49,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.activity_home) {
 
-
     @Inject
     lateinit var session: Session
 
@@ -58,8 +56,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private lateinit var navView: NavigationView
 
     private var listFriends = ArrayList<User?>()
-    private var userName: String? = null
-    private var userPhone: String? = null
 
 
     private val adapterUser by lazy {
@@ -84,8 +80,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 holder.binding.cardView.cardElevation = 0f
                 holder.binding.cardView.setCardBackgroundColor(Color.TRANSPARENT)
 
-
-
                 super.onBindViewHolder(holder, position)
             }
 
@@ -98,19 +92,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
         drawerLayout = binding.drawerLayout
         navView = binding.navigationView
-
-        //Set Status Bar Text to Black
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-
-        getUser()
-        getListUser()
-        search()
-        observe()
-        askNotificationPermission()
-
         binding.rvUser.adapter = adapterUser
 
 
+        //Set Status Bar Text to Black
+//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
+
+
+        getUser()
+        getListUser()
+        observe()
+        search()
+        askNotificationPermission()
+
+    }
+
+    private fun initView() {
+
+        sideMenu()
+        binding.user = session.getUser()
 
         //Swipe Refresh Layout
         binding.refreshLayout.setOnRefreshListener {
@@ -119,29 +120,25 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             getListUser()
         }
 
-        binding.btnMenu.setOnClickListener {
-            sideMenu()
-        }
-
         binding.ivProfile.setOnClickListener {
             activityLauncher.launch(createIntent<ProfileActivity>()) {
                 if (it.resultCode == Const.RELOAD) {
                     getUser()
+                    observe()
                 }
             }
         }
-
-
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@HomeActivity)
         builder.setTitle("Exit")
         builder.setMessage("Are you sure you want to exit?.")
-            .setPositiveButton("Exit") { dialog, id ->
+            .setPositiveButton("Exit") { _, _ ->
                 this@HomeActivity.finish()
             }
-            .setNegativeButton("Cancel") { dialog, id ->
+            .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
         val dialog: AlertDialog = builder.create()
@@ -158,39 +155,40 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
 
     private fun getUser() {
-//        val user = session.getUser()
-//        binding.user = user
         viewModel.getUser()
-////                success ->
-////            if(success) {
-////                sideMenu()
-////            }
-//        }
-//        userName = user?.nama
-//        userPhone = user?.nomorTelepon
     }
 
     private fun getListUser() {
         viewModel.getListUser()
     }
 
+    @Suppress("DEPRECATION")
     private fun sideMenu() {
 
         val inflater = LayoutInflater.from(this)
         val headerView = inflater.inflate(R.layout.nav_header, navView, false)
-        navView.addHeaderView(headerView)
-//        window.statusBarColor = ContextCompat.getColor(this,R.color.my_hint_color)
         val tvUsername = headerView.findViewById<TextView>(R.id.tvUsername)
         val tvPhone = headerView.findViewById<TextView>(R.id.tvPhone)
-        val ivProfile = headerView.findViewById<ImageView>(R.id.foto)
+        val ivProfile = headerView.findViewById<ImageView>(R.id.photo)
         val btnForward = headerView.findViewById<ImageButton>(R.id.iconForward)
 
+        if (headerView == null) {
+            // inflate a new header view and add it to the navigation view
+            val headersView = inflater.inflate(R.layout.nav_header, navView, false)
+            navView.addHeaderView(headersView)
+
+        }else{
+            navView.removeHeaderView(navView.getHeaderView(0))
+            navView.addHeaderView(headerView)
+        }
+
+//        val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(this, com.crocodic.core.R.color.text_red))
+//        val favourite = navView.findViewById<NavigationView>(R.id.nav_favourite)
+//        favourite.itemIconTintList = colorStateList
+
         val user = session.getUser()
-//        tvUsername.text = user?.nama
-//        tvPhone.text = user?.nomorTelepon
-        tvUsername.text = userName
-        Log.d("cek user","$userName")
-        tvPhone.text = userPhone
+        tvUsername.text = user?.nama
+        tvPhone.text = user?.nomorTelepon
 
         Glide.with(this)
             .load(user?.foto)
@@ -204,7 +202,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
 
         btnForward.setOnClickListener {
-            openActivity<ProfileActivity>()
+            activityLauncher.launch(createIntent<ProfileActivity>()) {
+                if (it.resultCode == Const.RELOAD) {
+                    getUser()
+                    observe()
+                }
+            }
         }
 
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
@@ -222,7 +225,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             override fun onDrawerClosed(drawerView: View) {
                 window.statusBarColor =
                     ContextCompat.getColor(this@HomeActivity, R.color.main_background_color)
-
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
             }
@@ -233,7 +235,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
 
         })
-
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_editPassword -> {
@@ -271,7 +272,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     // Handle ActionBarDrawerToggle click event
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START) == true) {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
@@ -291,7 +292,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             ApiStatus.LOADING -> loadingDialog.show()
                             ApiStatus.SUCCESS -> {
                                 loadingDialog.dismiss()
-                                loadingDialog.setResponse(it.message ?: return@collect)
+                                initView()
 
                             }
                             ApiStatus.ERROR -> {
@@ -300,14 +301,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             }
                             else -> loadingDialog.setResponse(it.message ?: return@collect)
                         }
-                    }
-                }
-                launch {
-                    viewModel.user.collect{ dataUser ->
-                        binding.user = dataUser
-                        userName = dataUser?.nama
-                        userPhone = dataUser?.nomorTelepon
-                        sideMenu()
                     }
                 }
                 launch {
@@ -325,10 +318,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun search() {
-        binding.etSearch.doOnTextChanged { text, start, before, count ->
+        binding.etSearch.doOnTextChanged { text, _, _, _ ->
             if (text!!.isNotEmpty()) {
-                val filter = listFriends.filter { it?.nama?.contains("$text", true) == true }
+                val filter = listFriends.filter { it?.nama?.contains("$text", true) == true || it?.namaSekolah?.contains("$text", true) == true || it?.nomorTelepon?.contains("$text", true) == true}
                 adapterUser.submitList(filter)
+
+                if (filter.isEmpty()) {
+                    binding.tvDataKosong.visibility = View.VISIBLE
+                } else {
+                    binding.tvDataKosong.visibility = View.GONE
+                }
             } else {
                 adapterUser.submitList(listFriends)
             }
@@ -341,14 +340,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         builder.setTitle("Log Out")
         builder.setMessage("Anda yakin ingin keluar dari aplikasi ini? Jika keluar semua data anda akan dihapus dari perangkat ini.")
             .setCancelable(false)
-            .setPositiveButton("Logout") { dialog, id ->
+            .setPositiveButton("Logout") { _, _ ->
                 // Delete selected note from database
                 tos("logout")
                 viewModel.logout()
                 openActivity<LoginActivity>()
                 finishAffinity()
             }
-            .setNegativeButton("Cancel") { dialog, id ->
+            .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
         val dialog: AlertDialog = builder.create()
@@ -379,10 +378,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
+                PackageManager.PERMISSION_GRANTED) {
+                //Do noting
             } else
                 if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                    //Do nothing
             } else {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }

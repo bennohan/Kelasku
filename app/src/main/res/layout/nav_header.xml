@@ -16,7 +16,7 @@
 
 
     <ImageView
-        android:id="@+id/foto"
+        android:id="@+id/photo"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:contentDescription="@string/image_profile"
@@ -33,7 +33,7 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/_18sdp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/foto"
+        app:layout_constraintTop_toBottomOf="@+id/photo"
         tools:layout_editor_absoluteX="16dp"
         tools:text="Mark Lee" />
 

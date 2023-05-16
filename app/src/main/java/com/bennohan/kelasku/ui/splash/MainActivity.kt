@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.bennohan.kelasku.R
 import com.bennohan.kelasku.data.Session
 import com.bennohan.kelasku.databinding.ActivityMainBinding
@@ -24,27 +25,30 @@ class MainActivity : NoViewModelActivity<ActivityMainBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+//            window.insetsController?.setSystemBarsAppearance(
+//                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+//                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+//        } else {
+//            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//        }
+        window.statusBarColor = ContextCompat.getColor(this,R.color.main_background_color)
 
         Handler(Looper.getMainLooper()).postDelayed({
             val user = session.getUser()
             if (user == null) {
-
                 binding.constraint.visibility = View.VISIBLE
                 binding.btnConfirm.setOnClickListener {
-                    openActivity<LoginActivity>{
+                    openActivity<LoginActivity> {
                         finish()
                     }
                 }
             } else {
-                openActivity<HomeActivity>{
+                openActivity<HomeActivity> {
                     finish()
                 }
             }
         }, splashDelay)
-
-
 
     }
 }

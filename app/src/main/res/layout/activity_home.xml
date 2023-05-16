@@ -16,10 +16,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            style="@style/AppTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#EFF2F0"
-            style="@style/AppTheme"
             android:orientation="vertical"
             tools:context=".ui.home.HomeActivity">
 
@@ -35,17 +35,17 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/button_menu"
                     android:foreground="?selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_baseline_menu_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/button_menu" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/member_list"
+                    android:text="@string/kelasku"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
                     android:textStyle="bold"
@@ -60,8 +60,8 @@
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="@dimen/_35sdp"
                     android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/image_profile"
                     android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/image_profile"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -75,39 +75,56 @@
                 android:layout_height="@dimen/_35sdp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="@dimen/_16sdp"
-                android:inputType="text"
                 android:layout_marginTop="@dimen/_13sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
+                android:autofillHints="username"
                 android:background="@drawable/edittext_background"
                 android:drawableStart="@drawable/search_vector"
                 android:drawablePadding="@dimen/_8sdp"
                 android:hint="@string/search_your_friends"
+                android:inputType="text"
                 android:paddingStart="@dimen/_8sdp"
                 android:paddingEnd="@dimen/_8sdp"
                 android:textColorHint="#CB4CAF50"
-                android:textStyle="bold"
-                android:autofillHints="username" />
+                android:textStyle="bold" />
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refreshLayout"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_height="wrap_content">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvUser"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:cardBackgroundColor="#00000000"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                tools:listitem="@layout/item_friends" />
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp">
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:foregroundGravity="center">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="#00000000"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:listitem="@layout/item_friends" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDataKosong"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_20sdp"
+                    android:text="@string/pencarian_tidak_ditemukan"/>
+
+                </FrameLayout>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -120,7 +137,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#EFF2F0"
-            app:menu="@menu/nav_menu"/>
+            app:menu="@menu/nav_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
